@@ -2,8 +2,7 @@ package todo
 
 import (
 	"encoding/json"
-	"fmt"
-	"io/ioutil"
+	"os"
 )
 
 type Item struct {
@@ -16,12 +15,24 @@ func SaveItems(filename string, items []Item) error {
 		return err
 	}
 
-	fmt.Println(string(b))
-
-	err = ioutil.WriteFile(filename, b, 0644)
+	err = os.WriteFile(filename, b, 0644)
 	if err != nil {
 		return err
 	}
 
 	return nil
+}
+
+func ReadItems(filename string) ([]Item, error) {
+	b, err := os.ReadFile(filename)
+	if err != nil {
+		return []Item{}, err
+	}
+
+	var items []Item
+	if err := json.Unmarshal(b, &items); err != nil {
+		return []Item{}, err
+	}
+
+	return items, nil
 }
