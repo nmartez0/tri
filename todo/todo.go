@@ -10,6 +10,7 @@ type Item struct {
 	Text     string
 	Priority int
 	position int
+	Done     bool
 }
 
 // ByPri implements sort.Interface for []Item based on
@@ -19,6 +20,9 @@ type ByPri []Item
 func (s ByPri) Len() int      { return len(s) }
 func (s ByPri) Swap(i, j int) { s[i], s[j] = s[j], s[i] }
 func (s ByPri) Less(i, j int) bool {
+	if s[i].Done != s[j].Done {
+		return s[j].Done
+	}
 	if s[i].Priority == s[j].Priority {
 		return s[i].position < s[j].position
 	}
@@ -76,6 +80,13 @@ func (i *Item) PrettyP() string {
 	}
 
 	return " "
+}
+
+func (i *Item) PrettyDone() string {
+	if i.Done {
+		return "X"
+	}
+	return ""
 }
 
 func (i *Item) Label() string {
