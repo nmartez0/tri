@@ -10,7 +10,7 @@
             "request": "launch",
             "mode": "debug",
             "program": "${workspaceFolder}",
-            "args": ["add", "format list", "-p1"]
+            "args": ["list"]
         }
     ]
 }
