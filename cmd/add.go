@@ -5,6 +5,7 @@ package cmd
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/nmartez0/tri/todo"
 	"github.com/spf13/cobra"
@@ -21,13 +22,19 @@ var addCmd = &cobra.Command{
 	Run: addRun,
 }
 
+var priority int
+
 func addRun(cmd *cobra.Command, args []string) {
-	items := []todo.Item{}
+	items, err := todo.ReadItems(dataFile)
+	if err != nil {
+		log.Printf("%v", err)
+	}
+
 	for _, x := range args {
 		items = append(items, todo.Item{Text: x})
 	}
 
-	err := todo.SaveItems("/home/nmartin/.tridos.json", items)
+	err = todo.SaveItems(dataFile, items)
 	if err != nil {
 		fmt.Errorf("%v", err)
 	}
@@ -45,4 +52,5 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// addCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	addCmd.Flags().IntVarP(&priority, "priority", "p", 2, "Priority:1,2,3")
 }
