@@ -54,7 +54,7 @@ func ReadItems(filename string) ([]Item, error) {
 		return []Item{}, err
 	}
 
-	for i, _ := range items {
+	for i := range items {
 		items[i].position = i + 1
 	}
 	return items, nil
